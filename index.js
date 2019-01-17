@@ -23,6 +23,15 @@ let notes = [
   },
 ]
 
+const logger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(logger)
 app.use(bodyParser.json())
 
 const generateId = () => {
@@ -77,6 +86,12 @@ app.post('/notes', (request, response) => {
 
   response.json(note)
 })
+
+const error = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(error)
 
 const PORT = 3001
 app.listen(PORT, () => {
