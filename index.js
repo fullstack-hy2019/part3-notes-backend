@@ -31,6 +31,7 @@ const logger = (request, response, next) => {
   next()
 }
 
+app.use(express.static('build'))
 app.use(logger)
 app.use(bodyParser.json())
 
@@ -93,7 +94,7 @@ const error = (request, response) => {
 
 app.use(error)
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
