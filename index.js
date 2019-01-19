@@ -28,11 +28,11 @@ app.get('/api/notes/:id', (request, response, next) => {
       if (note) {
         response.json(note.toJSON())
       } else {
-        next({ status: 404, error })
+        response.status(404).end()
       }
     })
     .catch(error => {
-      next({ status: 404, message: 'malformatted id', error })
+      next(error)
     })
 })
 
@@ -88,16 +88,13 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
-  if (response.headersSent || error.status === undefined) {
-    return next(error)
-  }
+  console.error(error.message)
 
-  console.error(error.error.stack)
-  if ( error.message ) {
-    response.status(error.status).send({ error: error.message })
-  } else {
-    response.status(error.status).end()
+  if (error.name === 'CastError' && error.kind == 'ObjectId') {
+    return response.status(400).send({ error: 'malformatted id' })
   } 
+
+  next(error)
 }
 
 app.use(errorHandler)
