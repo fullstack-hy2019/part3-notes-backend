@@ -31,9 +31,7 @@ app.get('/api/notes/:id', (request, response, next) => {
         response.status(404).end()
       }
     })
-    .catch(error => {
-      next(error)
-    })
+    .catch(error => next(error))
 })
 
 app.post('/api/notes', (request, response) => {
@@ -59,9 +57,7 @@ app.delete('/api/notes/:id', (request, response, next) => {
     .then(result => {
       response.status(204).end()
     })
-    .catch(error => {
-      next({ status: 400, message: 'malformatted id' })
-    })
+    .catch(error => next(error))
 })
 
 app.put('/api/notes/:id', (request, response, next) => {
@@ -76,9 +72,7 @@ app.put('/api/notes/:id', (request, response, next) => {
     .then(updatedNote => {
       response.json(updatedNote.toJSON())
     })
-    .catch(error => {
-      next({ status: 400, message: 'malformatted id', error })
-    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
