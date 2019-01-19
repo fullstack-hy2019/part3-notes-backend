@@ -31,8 +31,8 @@ const logger = (request, response, next) => {
   next()
 }
 
-app.use(logger)
 app.use(bodyParser.json())
+app.use(logger)
 
 const generateId = () => {
   const maxId =
