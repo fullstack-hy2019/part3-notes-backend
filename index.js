@@ -22,10 +22,18 @@ app.get('/api/notes', (request, response) => {
   })
 })
 
-app.get('/api/notes/:id', (request, response) => {
-  Note.findById(request.params.id).then(note => {
-    response.json(note.toJSON())
-  })
+app.get('/api/notes/:id', (request, response, next) => {
+  Note.findById(request.params.id)
+    .then(note => {
+      if (note) {
+        response.json(note.toJSON())
+      } else {
+        next({ status: 404, error })
+      }
+    })
+    .catch(error => {
+      next({ status: 404, message: 'malformatted id', error })
+    })
 })
 
 app.post('/api/notes', (request, response) => {
@@ -46,19 +54,53 @@ app.post('/api/notes', (request, response) => {
   })
 })
 
-
-app.delete('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
-  notes = notes.filter(note => note.id !== id)
-
-  response.status(204).end()
+app.delete('/api/notes/:id', (request, response, next) => {
+  Note.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => {
+      next({ status: 400, message: 'malformatted id' })
+    })
 })
 
-const error = (request, response) => {
+app.put('/api/notes/:id', (request, response, next) => {
+  const body = request.body
+
+  const note = {
+    content: body.content,
+    important: body.important,
+  }
+
+  Note.findByIdAndUpdate(request.params.id, note, { new: true })
+    .then(updatedNote => {
+      response.json(updatedNote.toJSON())
+    })
+    .catch(error => {
+      next({ status: 400, message: 'malformatted id', error })
+    })
+})
+
+const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
-app.use(error)
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  if (response.headersSent || error.status === undefined) {
+    return next(error)
+  }
+
+  console.error(error.error.stack)
+  if ( error.message ) {
+    response.status(error.status).send({ error: error.message })
+  } else {
+    response.status(error.status).end()
+  } 
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
