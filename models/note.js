@@ -7,7 +7,7 @@ const url = process.env.MONGODB_URI
 console.log('commecting to', url)
 
 mongoose.connect(url, { useNewUrlParser: true })
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch((error) => {
@@ -31,5 +31,5 @@ noteSchema.set('toJSON', {
     delete returnedObject.__v
   }
 })
-  
+
 module.exports = mongoose.model('Note', noteSchema)

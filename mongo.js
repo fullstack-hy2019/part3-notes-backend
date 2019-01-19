@@ -24,18 +24,8 @@ const note = new Note({
   important: false,
 })
 
-if (false) {
-  note.save().then(response => {
-    console.log('note saved!')
-    mongoose.connection.close()
-  })
-}
 
-
-
-Note.find({}).then(result => {
-  result.forEach(note => {
-    console.log(note)
-  })
+note.save().then(() => {
+  console.log('note saved!')
   mongoose.connection.close()
 })
