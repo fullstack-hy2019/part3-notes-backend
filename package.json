@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "watch": "nodemon index.js",
-    "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "watch": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -17,7 +17,12 @@
     "mongoose": "^5.4.4"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "eslint": "^5.12.1",
+    "jest": "^23.6.0",
     "nodemon": "^1.18.9"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
