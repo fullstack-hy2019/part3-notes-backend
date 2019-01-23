@@ -1,7 +1,8 @@
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhlbGxhcyIsImlkIjoiNWM0ODMwODk1NDMyOGY4MDhmYmQwMTViIiwiaWF0IjoxNTQ4MjQwOTg2fQ.EloofKUl6Mv6UUrRmqKfZxqQ09qS-vFrQM3UeoVE6-w
 
 {
-  "content": "REST-client on hyvä API:n testaamisessa",
+  "content": "Single-page-appit käyttävät Token-autentikointia",
   "important": true
 }
